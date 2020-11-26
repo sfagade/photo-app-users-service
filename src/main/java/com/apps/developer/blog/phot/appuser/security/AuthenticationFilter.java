@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import org.bouncycastle.jcajce.BCFKSLoadStoreParameter;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,7 +60,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = Jwts.builder().setSubject(userDetails.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("token.expiration"))))
-                .signWith(SignatureAlgorithm.ES512, environment.getProperty("token.secret")).compact();
+                .signWith(SignatureAlgorithm.HS512, environment.getProperty("token.secret")).compact();
 
         res.addHeader("token", token);
         res.addHeader("userId", userDetails.getUserId());

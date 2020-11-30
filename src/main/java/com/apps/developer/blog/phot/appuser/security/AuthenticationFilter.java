@@ -4,10 +4,8 @@ import com.apps.developer.blog.phot.appuser.service.UsersService;
 import com.apps.developer.blog.phot.appuser.shared.UserDto;
 import com.apps.developer.blog.phot.appuser.ui.model.LoginRequestModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,8 +22,8 @@ import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private UsersService usersService;
-    private Environment environment;
+    private final UsersService usersService;
+    private final Environment environment;
 
     public AuthenticationFilter(UsersService usersService, Environment environment,
                                 AuthenticationManager authenticationManager) {
@@ -53,8 +50,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
-                                            FilterChain filterChain, Authentication auth)
-            throws IOException, ServletException {
+                                            FilterChain filterChain, Authentication auth) {
         String userName = ((User) auth.getPrincipal()).getUsername();
         UserDto userDetails = usersService.getUserDetailsByEmail(userName);
 

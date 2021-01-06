@@ -21,36 +21,35 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
- *
  * @author samsonfagade
  */
 @RestController
 @RequestMapping("/users")
 public class UsersController {
 
-	@Autowired
-	private Environment env;
+    @Autowired
+    private Environment env;
 
-	@Autowired
-	UsersService usersService;
+    @Autowired
+    UsersService usersService;
 
-	@GetMapping("/status/check")
-	public String status() {
-		return "Working on port: " + env.getProperty("local.server.port");
-	}
+    @GetMapping("/status/check")
+    public String status() {
+        return "Working on port: " + env.getProperty("local.server.port") + " , with token = " + env.getProperty("token.secret");
+    }
 
-	@PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
-			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<CreateUserResponseModel> createUser(@Valid @RequestBody CreateUsersRequestModel userDetails) {
+    @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, produces = {
+            MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<CreateUserResponseModel> createUser(@Valid @RequestBody CreateUsersRequestModel userDetails) {
 
-		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
-		UserDto createdUser = usersService.createUser(userDto);
+        UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+        UserDto createdUser = usersService.createUser(userDto);
 
-		CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
+        CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
 
-		return new ResponseEntity<>(returnValue, HttpStatus.CREATED);
-	}
+        return new ResponseEntity<>(returnValue, HttpStatus.CREATED);
+    }
 }

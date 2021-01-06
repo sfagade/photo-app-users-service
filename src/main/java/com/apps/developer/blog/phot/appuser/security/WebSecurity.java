@@ -32,7 +32,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers("/**")
-                .hasIpAddress(this.environment.getProperty("gateway.ip"))
+                .hasIpAddress("0.0.0.0")
                 .and().addFilter(getAuthenticationFilter());
         http.headers().frameOptions().disable();
     }
